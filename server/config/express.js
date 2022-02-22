@@ -1,22 +1,24 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var compression = require("compression");
-var cors = require("cors");
+let createError = require("http-errors");
+let express = require("express");
+let path = require("path");
+let cookieParser = require("cookie-parser");
+let logger = require("morgan");
+let compression = require("compression");
+let cors = require("cors");
 
-var indexRouter = require("../routes/index.server.routes");
+let indexRouter = require("../routes/index.server.routes");
+let courseRouter = require("../routes/course.server.routes");
+let studentRouter = require("../routes/student.server.routes");
 
-var app = express();
+let app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
 
-//the process.env property allows you to access predefined environment variables
+//the process.env property allows you to access predefined environment letiables
 //such as NODE_ENV
-// Use the 'NDOE_ENV' variable to activate the 'morgan' logger or 'compress' middleware
+// Use the 'NDOE_ENV' letiable to activate the 'morgan' logger or 'compress' middleware
 if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
 } else if (process.env.NODE_ENV === "production") {
@@ -30,6 +32,8 @@ app.use(cookieParser());
 
 //routers
 app.use("/", indexRouter);
+app.use("/course", courseRouter);
+app.use("/student", studentRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
