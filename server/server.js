@@ -12,6 +12,12 @@ var debug = require("debug")("server:server");
 var http = require("http");
 
 /**
+ * Connect to MongoDB
+ */
+
+var db = mongoose();
+
+/**
  * Get port from environment and store in Express.
  */
 
@@ -24,12 +30,6 @@ app.set("port", port);
  */
 
 var server = http.createServer(app);
-
-/**
- * Connect to MongoDB
- */
-
-var db = mongoose();
 
 /**
  * Listen on provided port, on all network interfaces.

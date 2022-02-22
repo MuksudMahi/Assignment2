@@ -12,5 +12,10 @@ module.exports = function () {
       console.log("Error");
     });
 
+  //Loading Course model
+  require("../models/course.server.models");
+  //Loading Student model
+  require("../models/student.server.models");
+
   return db;
 };
