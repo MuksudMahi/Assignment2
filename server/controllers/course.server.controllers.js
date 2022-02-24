@@ -4,12 +4,7 @@ let bodyParser = require("body-parser");
 
 //Add a new course
 module.exports.addCourse = (req, res, next) => {
-  let newCourse = new Course({
-    courseCode: req.body.courseCode,
-    courseName: req.body.courseName,
-    section: req.body.section,
-    semester: req.body.semester,
-  });
+  let newCourse = new Course(req.body);
 
   newCourse
     .save()

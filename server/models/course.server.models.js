@@ -1,5 +1,6 @@
 let mongoose = require("mongoose");
 const { Schema } = mongoose;
+require("../models/student.server.models");
 
 const courseSchema = new Schema(
   {
@@ -19,6 +20,12 @@ const courseSchema = new Schema(
       required: "Section is required",
     },
     semester: String,
+    students: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Student",
+      },
+    ],
   },
   {
     timestamps: true,
