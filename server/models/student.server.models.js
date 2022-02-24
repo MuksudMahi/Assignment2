@@ -1,13 +1,15 @@
 let mongoose = require("mongoose");
 let { Schema } = mongoose;
+let passportLocalMongoose = require("passport-local-mongoose");
+var bcrypt = require("bcrypt-nodejs");
 
 let studentSchema = new Schema(
   {
     studentNumber: {
       type: String,
-      unique: true,
       match: [/[0-9]{9}/, "Student number should be 9 digits long number"],
       trim: true,
+      sparse: true,
       required: "Student number is required",
     },
     firstName: {
@@ -30,6 +32,14 @@ let studentSchema = new Schema(
       match: [/.+\@.+\..+/, "Invalid email address"],
       required: "Email is required",
     },
+    //courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+    courses: [
+      {
+        _id: { type: Schema.Types.ObjectId, ref: "Course" },
+        section: { type: String },
+      },
+    ],
+
     password: {
       type: String,
       required: "Password is required",
@@ -44,10 +54,24 @@ let studentSchema = new Schema(
   }
 );
 
-// Configure the 'StudentSchema' to use getters and virtuals when transforming to JSON
-studentSchema.set("toJSON", {
-  getters: true,
-  virtuals: true,
-});
+// // Configure the 'StudentSchema' to use getters and virtuals when transforming to JSON
+// studentSchema.set("toJSON", {
+//   getters: true,
+//   virtuals: true,
+// });
 
+studentSchema.methods.generateHash = function (password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+studentSchema.methods.validPassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
+
+// let options = {
+//   missingPasswordError: "wrong/missing password",
+//   usernameField: "studentNumber",
+// };
+studentSchema.plugin(passportLocalMongoose);
 mongoose.model("Student", studentSchema);

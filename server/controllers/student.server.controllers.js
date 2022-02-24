@@ -1,25 +1,118 @@
 let express = require("express");
 let mongoose = require("mongoose");
 let Student = mongoose.model("Student");
+let passport = require("passport");
+
+let Course = mongoose.model("Course");
 
 //Register new user
 module.exports.register = (req, res, next) => {
-  let newStudent = new Student(req.body);
+  // let newStudent = new Student(req.body);
 
-  newStudent
-    .save()
-    .then(() => res.json(newStudent))
-    .catch((err) => res.status(400).json("Error " + getErrorMessage(err)));
+  // Student.register(newStudent, req.body.password)
+  //   .then(() => res.json(newStudent))
+  //   .catch((err) => res.status(400).json("Error: " + err));
+  passport.authenticate("local-signup", (err, user, info) => {
+    //server error
+    if (err) {
+      res.status(400).json(err);
+    }
+    if (user == false) {
+      return res.json(info);
+    }
+    //user login error
+    req.login(user, (err) => {
+      //server error
+      if (err) {
+        return res.status(400).json(err);
+      }
+      res.json("logged in");
+    });
+  })(req, res, next);
 };
 
 //Get a user
-module.exports.login = (req, res, next) => {};
+module.exports.processLogin = (req, res, next) => {
+  //   Student.findOne({ studentNumber: req.body.username }).then((result) =>
+  //     res.json(result)
+  //   );
+  passport.authenticate("local-login", (err, user, info) => {
+    //server error
+    if (err) {
+      return next(err);
+    } else if (!user) {
+      return res.json(info);
+    }
+    //user login error
+    else {
+      req.login(user, (err) => {
+        //server error
+        if (err) {
+          return next(err);
+        }
+        return res.json(info);
+      });
+    }
+  })(req, res, next);
+};
+
+//Logout
+module.exports.processLogout = (req, res, next) => {
+  if (req.user) {
+    req.logout();
+    res.json("Logged out");
+  }
+};
 
 //Get student's courses
-module.exports.getStudentCourses = (req, res, next) => {};
+module.exports.getStudentCourses = (req, res, next) => {
+  Student.findOne({ _id: req.user._id })
+    .select({ courses: 1 })
+    .populate({ path: "courses._id", select: "courseName", model: "Course" })
+    .then((result) => res.json(result));
+};
 
 //Get student list
-module.exports.getStudentList = (req, res, next) => {};
+module.exports.getStudentList = (req, res, next) => {
+  Student.find()
+    .select({ firstName: 1, lastName: 1 })
+    .then((result) => res.json(result))
+    .catch((err) => res.status(400).json("Error: " + err));
+};
+
+//get logged in student
+module.exports.getStudent = (req, res, next) => {
+  return res.json(req.user);
+};
+
+//add a course
+module.exports.addCourse = (req, res, next) => {
+  let currentStudent = req.user;
+  currentStudent.courses.push({
+    _id: mongoose.Types.ObjectId(req.body.courseId),
+    section: req.body.section,
+  });
+  currentStudent
+    .save()
+    .then(res.json(currentStudent))
+    .catch((err) => res.status(400).json(err));
+};
+
+//drop a course
+module.exports.dropCourse = (req, res, next) => {
+  let currentStudent = req.user;
+  let courses = currentStudent.courses.filter((value, index, arr) => {
+    console.log(value._id);
+    console.log(mongoose.Types.ObjectId(req.body.courseId));
+    return !value._id.equals(mongoose.Types.ObjectId(req.body.courseId));
+  });
+  console.log(courses);
+  currentStudent.courses = courses;
+  currentStudent
+    .save()
+    .then(res.json(currentStudent))
+    .catch((err) => res.status(400).json(err));
+};
 
 // Create a new error handling controller method
 const getErrorMessage = function (err) {
