@@ -92,6 +92,15 @@ module.exports.addCourse = (req, res, next) => {
     _id: mongoose.Types.ObjectId(req.body.courseId),
     section: req.body.section,
   });
+  Course.findByIdAndUpdate(
+    mongoose.Types.ObjectId(req.body.courseId),
+    { $push: { students: currentStudent._id } },
+    { new: true, upsert: true },
+    function (err, managerparent) {
+      if (err) throw err;
+      return;
+    }
+  );
   currentStudent
     .save()
     .then(res.json(currentStudent))
@@ -102,12 +111,30 @@ module.exports.addCourse = (req, res, next) => {
 module.exports.dropCourse = (req, res, next) => {
   let currentStudent = req.user;
   let courses = currentStudent.courses.filter((value, index, arr) => {
-    console.log(value._id);
-    console.log(mongoose.Types.ObjectId(req.body.courseId));
     return !value._id.equals(mongoose.Types.ObjectId(req.body.courseId));
   });
-  console.log(courses);
   currentStudent.courses = courses;
+  currentStudent
+    .save()
+    .then(res.json(currentStudent))
+    .catch((err) => res.status(400).json(err));
+};
+
+//update course
+module.exports.updateCourse = (req, res, next) => {
+  let currentStudent = req.user;
+  let updatedCourse = {
+    _id: mongoose.Types.ObjectId(req.body.courseId),
+    section: req.body.section,
+  };
+
+  let courses = currentStudent.courses.filter((value, index, arr) => {
+    return !value._id.equals(updatedCourse._id);
+  });
+
+  currentStudent.courses = courses;
+  currentStudent.courses.push(updatedCourse);
+
   currentStudent
     .save()
     .then(res.json(currentStudent))

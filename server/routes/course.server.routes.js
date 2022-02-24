@@ -5,11 +5,13 @@ let courseController = require("../controllers/course.server.controllers");
 
 let checkAuth = require("../config/auth");
 
-router.post("/", courseController.addCourse);
+router.post("/addcourse", checkAuth.requireAuth, courseController.addCourse);
 router.get(
-  "/:courseCode",
+  "/find/:courseCode",
   checkAuth.requireAuth,
   courseController.findByCourseCode
 );
+router.get("/students", courseController.showEnrolledStudnets);
+router.post("/addstudent", courseController.addStudentToCourse);
 
 module.exports = router;

@@ -10,8 +10,17 @@ router.get("/", studentController.getStudent);
 router.post("/login", studentController.processLogin);
 router.get("/logout", studentController.processLogout);
 router.get("/list", checkAuth.requireAuth, studentController.getStudentList);
-router.get("/courses", studentController.getStudentCourses);
-router.post("/addcourse", studentController.addCourse);
-router.post("/dropcourse", studentController.dropCourse);
+router.get(
+  "/courses",
+  checkAuth.requireAuth,
+  studentController.getStudentCourses
+);
+router.post("/addcourse", checkAuth.requireAuth, studentController.addCourse);
+router.post("/dropcourse", checkAuth.requireAuth, studentController.dropCourse);
+router.post(
+  "/updatecourse",
+  checkAuth.requireAuth,
+  studentController.updateCourse
+);
 
 module.exports = router;

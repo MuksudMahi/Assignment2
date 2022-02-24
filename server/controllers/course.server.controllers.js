@@ -13,16 +13,35 @@ module.exports.addCourse = (req, res, next) => {
 };
 
 //Update a course
-module.exports.updateCourse = (req, res, next) => {};
+//module.exports.updateCourse = (req, res, next) => {};
 
 //Drop a course
-module.exports.dropCourse = (req, res, next) => {};
+//module.exports.dropCourse = (req, res, next) => {};
 
 //Show all students enrolled in a course
-module.exports.showEnrolledStudnets = (req, res, next) => {};
+module.exports.showEnrolledStudnets = (req, res, next) => {
+  Course.findOne({ _id: mongoose.Types.ObjectId(req.body.courseId) })
+    .select({ students: 1 })
+    .populate({ path: "students", select: "firstName lastName" })
+    .then((result) => res.json(result))
+    .catch((err) => res.json(err));
+};
 
 //Show all courses
 module.exports.showCourseList = (req, res, next) => {};
+
+//add student to course
+module.exports.addStudentToCourse = (req, res, next) => {
+  Course.findByIdAndUpdate(
+    mongoose.Types.ObjectId(req.body.courseId),
+    { $push: { students: mongoose.Types.ObjectId(req.body.studentId) } },
+    { new: true, upsert: true },
+    (err, managerparent) => {
+      if (err) throw err;
+      res.json(managerparent);
+    }
+  );
+};
 
 //find course by courseCode
 module.exports.findByCourseCode = (req, res, next) => {
