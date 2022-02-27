@@ -46,6 +46,8 @@ module.exports = (passport) => {
               // if there is no user with that email
               // create the user
               var newUser = new User(req.body);
+              console.log(req.body);
+              console.log(newUser);
 
               // set the user's local credentials
               //newUser.studentNumber = studentNumber;
@@ -53,7 +55,7 @@ module.exports = (passport) => {
 
               // save the user
               newUser.save((err) => {
-                if (err) throw err;
+                if (err) return done(err);
                 return done(null, newUser);
               });
             }
@@ -90,7 +92,7 @@ module.exports = (passport) => {
             return done(null, false, { message: "Wrong password" }); // create the loginMessage and save it to session as flashdata
 
           // all is well, return successful user
-          //console.log(user);
+          console.log(user);
           return done(null, user, { message: "Successfully authenticated" });
         });
       }

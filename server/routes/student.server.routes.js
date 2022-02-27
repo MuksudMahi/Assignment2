@@ -9,18 +9,10 @@ router.post("/register", studentController.register);
 router.get("/", studentController.getStudent);
 router.post("/login", studentController.processLogin);
 router.get("/logout", studentController.processLogout);
-router.get("/list", checkAuth.requireAuth, studentController.getStudentList);
-router.get(
-  "/courses",
-  checkAuth.requireAuth,
-  studentController.getStudentCourses
-);
-router.post("/addcourse", checkAuth.requireAuth, studentController.addCourse);
-router.post("/dropcourse", checkAuth.requireAuth, studentController.dropCourse);
-router.post(
-  "/updatecourse",
-  checkAuth.requireAuth,
-  studentController.updateCourse
-);
+router.get("/list", studentController.getStudentList);
+router.get("/courses", studentController.getStudentCourses);
+router.post("/addcourse", studentController.addCourse);
+router.post("/dropcourse", studentController.dropCourse);
+router.post("/updatecourse", studentController.updateCourse);
 
 module.exports = router;

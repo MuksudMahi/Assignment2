@@ -5,13 +5,11 @@ let courseController = require("../controllers/course.server.controllers");
 
 let checkAuth = require("../config/auth");
 
-router.post("/addcourse", checkAuth.requireAuth, courseController.addCourse);
-router.get(
-  "/find/:courseCode",
-  checkAuth.requireAuth,
-  courseController.findByCourseCode
-);
-router.get("/students", courseController.showEnrolledStudnets);
+router.get("/", courseController.showCourseList);
+router.post("/addcourse", courseController.addCourse);
+router.get("/find/:courseCode", courseController.findByCourseCode);
+router.get("/students/:courseId", courseController.showEnrolledStudents);
 router.post("/addstudent", courseController.addStudentToCourse);
+router.post("/delete", courseController.deletCourse);
 
 module.exports = router;

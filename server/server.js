@@ -22,7 +22,7 @@ var db = mongoose();
  */
 
 var app = require("./config/express");
-var port = normalizePort(process.env.PORT || "3000");
+var port = normalizePort(process.env.PORT || "3500");
 app.set("port", port);
 
 /**
