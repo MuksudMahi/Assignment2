@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -22,26 +22,6 @@ export default function AddCourse(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //axios;
-    // .post("http://localhost:3500/course/addcourse", {
-    //   courseCode: courseCode,
-    //   courseName: courseName,
-    //   section: sections,
-    //   semester: semester,
-    // })
-    // .then((response) => {
-    //   console.log(response.data);
-    //   if (response.data.success === "yes") {
-    //     toast.success(response.data.message);
-    //     navigate("/home", { replace: true });
-    //   } else if (response.data.message === "session expired") {
-    //     toast.error(response.data.message);
-    //     navigate("/", { replace: true });
-    //   } else toast.error(response.data.message);
-    // })
-    // .catch((error) => {
-    //   toast.error(error);
-    // });
     axios({
       method: "POST",
       data: {
@@ -57,7 +37,7 @@ export default function AddCourse(props) {
         console.log(response.data);
         if (response.data.success === "yes") {
           toast.success(response.data.message);
-          navigate("/home", { replace: true });
+          navigate("/allcourses", { replace: true });
         } else if (response.data.message === "session expired") {
           toast.error(response.data.message);
           auth.logout();
