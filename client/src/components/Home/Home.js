@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import NavBar from "../Nav/Nav";
 import auth from "../Auth/Auth";
+import "./Home.css";
 
 export default function Home(props) {
   const navigate = useNavigate();
@@ -16,6 +15,7 @@ export default function Home(props) {
   return (
     <div>
       <NavBar />
+      <h1 className="Home">Welcome to course registration website</h1>
     </div>
   );
 }

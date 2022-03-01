@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  Form,
-  Button,
-  Row,
-  Col,
-  Spinner,
-  ListGroup,
-  Table,
-} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Button, Spinner, Table } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -193,6 +185,13 @@ export default function AllCourses(props) {
           ))}{" "}
         </tbody>
       </Table>
+      <Button
+        variant="primary"
+        size="sm"
+        onClick={() => navigate("/addcourse")}
+      >
+        Add Course
+      </Button>
     </div>
   );
 }

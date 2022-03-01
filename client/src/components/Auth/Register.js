@@ -43,6 +43,7 @@ export default function Register(props) {
         url: "http://localhost:3500/student/register",
       })
         .then((response) => {
+          //console.log(response.data);
           if (response.data.success === "Yes") {
             toast.success(response.data.message);
             auth.login(response.data.studentNumber);
@@ -52,28 +53,6 @@ export default function Register(props) {
         .catch((error) => {
           toast.error(error);
         });
-      // axios
-      //   .post("http://localhost:3500/student/register", {
-      //     studentNumber: studentNumber,
-      //     password: password,
-      //     firstName: firstName,
-      //     lastName: lastName,
-      //     address: address,
-      //     city: city,
-      //     phoneNumber: phoneNumber,
-      //     email: email,
-      //     program: program,
-      //   })
-      //   .then((response) => {
-      //     if (response.data.success === "Yes") {
-      //       toast.success(response.data.message);
-      //       auth.login(response.data.studentNumber);
-      //       navigate("/home", { replace: true });
-      //     } else toast.error(response.data.message);
-      //   })
-      //   .catch((error) => {
-      //     toast.error(error);
-      //   });
     }
   };
   return (

@@ -46,8 +46,8 @@ module.exports = (passport) => {
               // if there is no user with that email
               // create the user
               var newUser = new User(req.body);
-              console.log(req.body);
-              console.log(newUser);
+              //console.log(req.body);
+              //console.log(newUser);
 
               // set the user's local credentials
               //newUser.studentNumber = studentNumber;
@@ -55,6 +55,7 @@ module.exports = (passport) => {
 
               // save the user
               newUser.save((err) => {
+                //console.log("inside save");
                 if (err) return done(err);
                 return done(null, newUser);
               });
